@@ -6,8 +6,8 @@ import 'package:news_app/models/Channels_Headlines_Models.dart';
 
 class Newsviewmodel {
   final _rep = NewsRepository();
-  Future<NewsChannelsHeadlinesModels> fetchNewsChannelsApi() async {
-    final response = await _rep.fetchNewsChannelsApi();
+  Future<NewsChannelsHeadlinesModels> fetchNewsChannelsApi(String channelName) async {
+    final response = await _rep.fetchNewsChannelsApi(channelName);
     return response;
   }
 }

@@ -16,10 +16,22 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+enum FilterList {
+  bbcnews,
+  arynews,
+  businessinsider,
+  independance,
+  reuters,
+  cnn,
+}
+
 class _HomeScreenState extends State<HomeScreen> {
   Newsviewmodel newsviewmodel = Newsviewmodel();
 
   final formate = DateFormat('MMMM ,DD ,YYYY');
+
+  FilterList? selectedMenu;
+  String name = 'bbc-news';
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +57,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontSize: 20),
             ),
           ),
+          actions: [
+            PopupMenuButton<FilterList>(
+                initialValue: selectedMenu,
+                onSelected: (FilterList items) {
+                  if (FilterList.bbcnews.name == items.name) {
+                    name = 'bbc-news';
+                  }
+                  if (FilterList.arynews.name == items.name) {
+                    name = 'ary-news';
+                  }
+                  if (FilterList.cnn.name == items.name) {
+                    name = 'cnn';
+                  }
+                  setState(() {
+                    selectedMenu = items;
+                  });
+                },
+                itemBuilder: (context) => <PopupMenuEntry<FilterList>>[
+                      PopupMenuItem<FilterList>(
+                          value: FilterList.bbcnews, child: Text('bbcnews')),
+                      PopupMenuItem<FilterList>(
+                          value: FilterList.arynews, child: Text('arynews')),
+                      PopupMenuItem<FilterList>(
+                          value: FilterList.cnn, child: Text('cnn')),
+                      // PopupMenuItem<FilterList>(
+                      //     value: FilterList.ccn, child: Text('ccn')),
+                      // PopupMenuItem<FilterList>(
+                      //     value: FilterList.bbcnews, child: Text('bbcnews')),
+                    ])
+          ],
         ),
         body: ListView(
           children: [
@@ -52,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: height * .5,
               width: width,
               child: FutureBuilder<NewsChannelsHeadlinesModels>(
-                future: newsviewmodel.fetchNewsChannelsApi(),
+                future: newsviewmodel.fetchNewsChannelsApi(name),
                 // initialData: InitialData,
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
