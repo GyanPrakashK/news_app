@@ -6,6 +6,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:news_app/Screen_view/Categories_screen.dart';
+import 'package:news_app/models/Categories_News_Models.dart';
 import 'package:news_app/models/Channels_Headlines_Models.dart';
 import 'package:news_app/view_model/news_view_model.dart';
 
@@ -46,7 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 25,
               width: 25,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Catogries_Screen()));
+            },
           ),
           title: Center(
             child: Text(
@@ -206,7 +211,99 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                 },
               ),
-            )
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: FutureBuilder<CategoriesNewsModels>(
+                future: newsviewmodel.fetchCategoriesNewsapi('General'),
+                // initialData: InitialData,
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: SpinKitCircle(
+                        color: Colors.blue,
+                        size: 47,
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: snapshot.data!.articles!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        // ignore: unused_local_variable
+                        DateTime dateTime = DateTime.parse(snapshot
+                            .data!.articles![index].publishedAt
+                            .toString());
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: CachedNetworkImage(
+                                  imageUrl: snapshot
+                                      .data!.articles![index].urlToImage
+                                      .toString(),
+                                  fit: BoxFit.cover,
+                                  height: height * .18,
+                                  width: width * .3,
+                                  placeholder: (context, url) => Container(
+                                    child: spinkit2,
+                                  ),
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.error_outline,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                  child: Container(
+                                height: height * .18,
+                                padding: EdgeInsets.only(left: 15),
+                                child: Column(children: [
+                                  Text(
+                                    snapshot.data!.articles![index].title
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        snapshot
+                                            .data!.articles![index].source!.name
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12),
+                                      ),
+                                      Text(
+                                        formate.format(dateTime),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12),
+                                      ),
+                                    ],
+                                  )
+                                ]),
+                              ))
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
           ],
         ));
   }
