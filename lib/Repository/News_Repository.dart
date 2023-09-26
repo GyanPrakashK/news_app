@@ -10,7 +10,7 @@ import 'package:news_app/models/Channels_Headlines_Models.dart';
 
 import '../models/Categories_News_Models.dart';
 
-class NewsRepository {
+class NewsRepository {  
   Future<NewsChannelsHeadlinesModels> fetchNewsChannelsApi(
       String channelName) async {
     String url =
