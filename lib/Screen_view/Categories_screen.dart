@@ -127,9 +127,10 @@ class _Catogries_ScreenState extends State<Catogries_Screen> {
                                 Text(
                                   snapshot.data!.articles![index].title
                                       .toString(),
+                                  overflow: TextOverflow.fade,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15),
+                                      fontSize: 13),
                                 ),
                                 Row(
                                   mainAxisAlignment:
@@ -139,15 +140,17 @@ class _Catogries_ScreenState extends State<Catogries_Screen> {
                                       snapshot
                                           .data!.articles![index].source!.name
                                           .toString(),
+                                      overflow: TextOverflow.fade,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 12),
                                     ),
                                     Text(
                                       formate.format(dateTime),
+                                      overflow: TextOverflow.visible,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 12),
+                                          fontSize: 11),
                                     ),
                                   ],
                                 )
